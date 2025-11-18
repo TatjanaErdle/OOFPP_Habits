@@ -22,13 +22,14 @@ It is a simple Python application to create, track, and analyze personal habits 
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/<dein-repo>/habit-tracker.git
-   cd habit-tracker
+   git clone https://github.com/TatjanaErdle/OOFPP_Habits.git
+    cd OOFPP_Habits
 2. Create a virtual environment:
     ```bash
-    python -m venv venv
-    source venv/bin/activate # Linux/Mac
-    venv\Scripts\activate # Windows
+    # Linux/Mac:
+    source venv/bin/activate
+    # Windows (PowerShell oder CMD):
+    venv\Scripts\activate
 3. Install dependencies (All required packages are listed in requirements.txt.):
     ```bash
    pip install -r requirements.txt
@@ -48,6 +49,9 @@ Run the program and select from the menu:
 2.Show all habits
 3.Analysis functions
 4.Exit
+
+#### add_new_habit
+NOCH BEFÜLLEN
 
 ## Database Structure
 - **habits**: stores habit definitions (id, name, description, periodicity, created_at)
@@ -79,6 +83,8 @@ Future improvements may include reminders, visual dashboards, multi-user support
 ├── requirements.txt
 ├── README.md
 └── TESTS.md
+
+
 
 
 
