@@ -45,13 +45,11 @@ so that the production data (habits.db) is not changed.):
 
 ## Usage
 Run the program and select from the menu:
+
 1.Habit-specific actions
 2.Show all habits
 3.Analysis functions
 4.Exit
-
-#### add_new_habit
-NOCH BEFÜLLEN
 
 ## Database Structure
 - **habits**: stores habit definitions (id, name, description, periodicity, created_at)
