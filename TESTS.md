@@ -53,3 +53,8 @@ This ensures stable results, independent of the actual day the tests are run.
 ## Main (main.py)
 - Contains only CLI logic (menus, input/output).
 - No separate tests are required, as all modules are already covered.
+
+
+
+<img width="782" height="65" alt="image" src="https://github.com/user-attachments/assets/5e1c98c8-eca8-4b6f-98ec-af5219d7e897" />
+
