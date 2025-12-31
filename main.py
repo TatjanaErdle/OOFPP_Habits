@@ -23,27 +23,23 @@ def main():
     while True:
         console.print("\n[bold cyan]===== HABIT TRACKER =====[/bold cyan]")
         print("1. Habit-specific actions")
-        print("2. Show all habits")
-        print("3. Analysis")
-        print("4. Exit")
+        print("2. Analysis")
+        print("3. Exit")
 
-        choice = input("Please select an option (1–4): ")
+        choice = input("Please select an option (1–3): ")
 
         if choice == "1":
             show_habit_actions_menu(manager)
 
         elif choice == "2":
-            manager.show_habits_rich()
-
-        elif choice == "3":
             show_analysis_menu(manager)
 
-        elif choice == "4":
+        elif choice == "3":
             console.print("[bold cyan]Program is ending. Goodbye![/bold cyan]")
             break
 
         else:
-            console.print("[red]Invalid entry. Please select 1–4.[/red]")
+            console.print("[red]Invalid entry. Please select 1–3.[/red]")
 
 # --- Habit-specific menu ---
 
@@ -53,22 +49,16 @@ def show_habit_actions_menu(manager):
         console.print("\n[bold yellow]--- Habit Actions ---[/bold yellow]")
         print("1. Create new habit")
         print("2. Delete habit")
-        print("3. Mark habit as completed")
-        print("4. Show current streak of a habit")
-        print("5. Check if habit is completed today")
-        print("6. Show next due date of a habit")
-        print("7. Back to main menu")
+        print("3. Edit habit")
+        print("4. Mark habit as completed")
+        print("5. Show current streak of a habit")
+        print("6. Check if habit is completed today")
+        print("7. Show next due date of a habit")
+        print("8. Back to main menu")
 
-        choice = input("Please select an option (1–7): ")
+        choice = input("Please select an option (1–8): ")
 
         if choice == "1":
-            name = input("Enter habit name: ")
-            description = input("Enter description: ")
-            periodicity = input("Enter frequency (daily/weekly/monthly/yearly): ")
-            manager.add_new_habit(name, description, periodicity)
-            console.print(f"[green]Habit '{name}' created.[/green]")
-
-        elif choice == "1":
             name = input("Enter habit name: ")
             description = input("Enter description: ")
             periodicity = input("Enter frequency (daily/weekly/monthly/yearly): ")
@@ -97,6 +87,29 @@ def show_habit_actions_menu(manager):
         elif choice == "3":
             manager.show_habits_rich()
             try:
+                habit_id = int(input("Enter the ID of the habit to edit: "))
+                habit = manager.get_habit_by_id(habit_id)
+                if habit:
+                    new_name = input("Enter new name (leave blank to keep current): ")
+                    new_description = input("Enter new description (leave blank to keep current): ")
+                    new_periodicity = input(
+                        "Enter new frequency (daily/weekly/monthly/yearly, leave blank to keep current): ")
+
+                    manager.edit_habit(
+                        habit_id,
+                        new_name if new_name else None,
+                        new_description if new_description else None,
+                        new_periodicity if new_periodicity else None
+                    )
+                    console.print(f"[green]Habit {habit_id} updated.[/green]")
+                else:
+                    console.print(f"[red]Habit with ID {habit_id} not found.[/red]")
+            except ValueError:
+                console.print("[red]Invalid input.[/red]")
+
+        elif choice == "4":
+            manager.show_habits_rich()
+            try:
                 habit_id = int(input("Enter the ID of the habit: "))
                 habit = manager.get_habit_by_id(habit_id)
                 if habit:
@@ -106,7 +119,7 @@ def show_habit_actions_menu(manager):
             except ValueError:
                 console.print("[red]Invalid input.[/red]")
 
-        elif choice == "4":
+        elif choice == "5":
             manager.show_habits_rich()
             try:
                 habit_id = int(input("Enter the ID of the habit: "))
@@ -119,7 +132,7 @@ def show_habit_actions_menu(manager):
             except ValueError:
                 console.print("[red]Invalid input.[/red]")
 
-        elif choice == "5":
+        elif choice == "6":
             manager.show_habits_rich()
             try:
                 habit_id = int(input("Enter the ID of the habit: "))
@@ -134,7 +147,7 @@ def show_habit_actions_menu(manager):
             except ValueError:
                 console.print("[red]Invalid input.[/red]")
 
-        elif choice == "6":
+        elif choice == "7":
             manager.show_habits_rich()
             try:
                 habit_id = int(input("Enter the ID of the habit: "))
@@ -147,7 +160,7 @@ def show_habit_actions_menu(manager):
             except ValueError:
                 console.print("[red]Invalid input.[/red]")
 
-        elif choice == "7":
+        elif choice == "8":
             break
         else:
             console.print("[red]Invalid input.[/red]")
@@ -158,14 +171,23 @@ def show_analysis_menu(manager):
     """Submenu for analysis functions."""
     while True:
         console.print("\n[bold yellow]--- Analysis ---[/bold yellow]")
-        print("1. Display habits by frequency")
-        print("2. Display the longest series of a habit")
-        print("3. Longest series of all habits")
-        print("4. Back to main menu")
+        print("1. Show all habits")
+        print("2. Display habits by frequency")
+        print("3. Display the longest series of a habit")
+        print("4. Longest series of all habits")
+        print("5. Back to main menu")
 
         choice = input("Please select an option (1–5): ")
 
         if choice == "1":
+            manager.load_habits()
+            habits = manager.get_all_habits()
+            if not habits:
+                console.print("[red]No habits found.[/red]")
+            else:
+                manager.show_habits_rich_for(habits, title="All Habits")
+
+        elif choice == "2":
             # Display filtered habits by periodicity
             periodicity = input("What frequency (daily/weekly/monthly/yearly)? ")
             manager.load_habits()
@@ -175,7 +197,7 @@ def show_analysis_menu(manager):
             else:
                 manager.show_habits_rich_for(filtered, title=f"Habits ({periodicity})")
 
-        elif choice == "2":
+        elif choice == "3":
             # Longest series for a selected habit ID
             manager.load_habits()
             all_habits = manager.get_all_habits()
@@ -194,13 +216,13 @@ def show_analysis_menu(manager):
             except ValueError:
                 console.print("[red]Invalid input.[/red]")
 
-        elif choice == "3":
+        elif choice == "4":
             # Longest streak across all habits
             manager.load_habits()
             streak = analysis.get_longest_streak_all_habits()
             console.print(f"[bold green]Longest streak of all habits: {streak} days[/bold green]")
 
-        elif choice == "4":
+        elif choice == "5":
             break
         else:
             console.print("[red]Invalid input.[/red]")
