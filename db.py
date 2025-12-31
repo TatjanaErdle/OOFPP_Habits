@@ -45,6 +45,23 @@ def create_tables():
     conn.commit()
     conn.close()
 
+def import_fixture():
+    """Imports initial demo data from test_fixture.sql if the DB is empty."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Check if habits table is empty
+    cursor.execute("SELECT COUNT(*) FROM habits")
+    count = cursor.fetchone()[0]
+
+    if count == 0:
+        with open("test_fixture.sql", "r") as f:
+            sql_script = f.read()
+        conn.executescript(sql_script)
+        conn.commit()
+
+    conn.close()
+
 # --- Habits ---
 
 def add_habit(name, description, periodicity):
@@ -71,6 +88,32 @@ def get_habits():
 
     conn.close()
     return habits
+
+def delete_habit(habit_id):
+    """Deletes a habit and all its completions from the database."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM completions WHERE habit_id = ?", (habit_id,))
+    cursor.execute("DELETE FROM habits WHERE id = ?", (habit_id,))
+
+    conn.commit()
+    conn.close()
+
+def edit_habit(habit_id, new_name=None, new_description=None, new_periodicity=None):
+    """Updates fields of a habit in the database."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    if new_name:
+        cursor.execute("UPDATE habits SET name=? WHERE id=?", (new_name, habit_id))
+    if new_description:
+        cursor.execute("UPDATE habits SET description=? WHERE id=?", (new_description, habit_id))
+    if new_periodicity:
+        cursor.execute("UPDATE habits SET periodicity=? WHERE id=?", (new_periodicity, habit_id))
+
+    conn.commit()
+    conn.close()
 
 # --- Completions ---
 
