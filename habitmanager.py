@@ -1,5 +1,5 @@
 """
-habitManager.py
+habitmanager.py
 ----------------
 This module contains the HabitManager class, which acts as an interface between
 the command line interface (CLI) and the database. It manages
@@ -7,13 +7,12 @@ all habits, provides CRUD operations, marks completions, calculates status
 and streaks, and provides output functions via rich tables.
 """
 
-import sqlite3
 from habit import Habit
 from rich.table import Table
 from rich.console import Console
 import db
 
-
+console = Console()
 
 class HabitManager:
     """HabitManager is responsible for managing all habits
@@ -25,9 +24,10 @@ class HabitManager:
         self.habits = []
 
     def initialize_database(self):
-        """Ensures that the database tables exist."""
+        """Ensures that the database tables exist and loads initial demo data."""
         db.create_tables()
-        print("Database initialized or already existing.")
+        db.import_fixture()
+        print("Database initialized with demo data (if empty).")
 
     # --- Load & Access ---
 
@@ -64,15 +64,14 @@ class HabitManager:
 
     def delete_habit(self, habit_id):
         """Deletes a habit (and its completions) from the database."""
-        conn = sqlite3.connect(db.DB_NAME)
-        cursor = conn.cursor()
-
-        cursor.execute("DELETE FROM completions WHERE habit_id = ?", (habit_id,))
-        cursor.execute("DELETE FROM habits WHERE id = ?", (habit_id,))
-
-        conn.commit()
-        conn.close()
+        db.delete_habit(habit_id)
         print(f"Habit with ID {habit_id} deleted.")
+        self.load_habits()
+
+    def edit_habit(self, habit_id, new_name=None, new_description=None, new_periodicity=None):
+        """Edits an existing habit in the database."""
+        db.edit_habit(habit_id, new_name, new_description, new_periodicity)
+        print(f"Habit with ID {habit_id} updated.")
         self.load_habits()
 
     # --- Completions ---
@@ -112,8 +111,7 @@ class HabitManager:
 
     # --- Output (Rich Table) ---
 
-    def _render_habits_table(self, habits, title="Habit Overview"):
-        console = Console()
+    def render_habits_table(self, habits, title="Habit Overview"):
         table = Table(title=title)
 
         table.add_column("ID", justify="right")
@@ -148,7 +146,7 @@ class HabitManager:
                 status_colored,
                 habit.created_at,
                 last_completion,
-        )
+                )
 
         console.print(table)
 
@@ -156,10 +154,10 @@ class HabitManager:
         """Displays all habits from the database."""
         self.load_habits()
         habits = self.get_all_habits()
-        self._render_habits_table(habits, title="Habit Overview")
+        self.render_habits_table(habits, title="Habit Overview")
 
     def show_habits_rich_for(self, habits, title="Habit Overview"):
         """Displays a list of habits that have been passed on."""
-        self._render_habits_table(habits, title=title)
+        self.render_habits_table(habits, title=title)
 
 
