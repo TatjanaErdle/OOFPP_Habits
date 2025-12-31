@@ -9,7 +9,6 @@ calculating streaks, checking due/overdue status, and determining the next due d
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 import db
-from db import mark_completion, get_completions
 
 
 class Habit:
@@ -30,7 +29,7 @@ class Habit:
         Adds a current timestamp if the habit has not yet been completed today.
         """
         if not self.is_completed_today():
-            mark_completion(self.id)
+            db.mark_completion(self.id)
             print(f"Habit '{self.name}' marked as completed.")
         else:
             print(f"Habit '{self.name}' was already completed today.")
@@ -39,7 +38,7 @@ class Habit:
         """
         Checks whether the habit has already been completed today.
         """
-        completions = get_completions(self.id)
+        completions = db.get_completions(self.id)
         today = datetime.now().date()
         return any(datetime.strptime(c[0], "%Y-%m-%d %H:%M:%S").date() == today for c in completions)
 
@@ -161,6 +160,11 @@ class Habit:
     # --- Status ---
 
     def is_due_today(self):
+        """
+        Returns True if the habit is due today.
+        A habit is considered due when it has not been completed in the current period
+        (day, week, month, or year depending on its periodicity).
+        """
         return not self.was_completed_this_period()
 
     def is_overdue(self):
@@ -210,6 +214,14 @@ class Habit:
     # --- Planning ---
 
     def next_due_date(self):
+        """
+        Determines the next date on which the habit becomes due.
+        The next due date is calculated based on the timestamp of the
+        most recent completion and the habit’s periodicity (daily,
+        weekly, monthly, or yearly). If the habit has never been
+        completed, today’s date is returned.
+        """
+
         completions = db.get_completions(self.id)
 
         if not completions:
