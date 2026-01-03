@@ -14,6 +14,7 @@ import db
 
 console = Console()
 
+
 class HabitManager:
     """HabitManager is responsible for managing all habits
     and acts as the interface between the CLI and the database"""
@@ -40,7 +41,7 @@ class HabitManager:
                 name=row[1],
                 description=row[2],
                 periodicity=row[3],
-                created_at=row[4]
+                created_at=row[4],
             )
             self.habits.append(habit)
 
@@ -68,7 +69,9 @@ class HabitManager:
         print(f"Habit with ID {habit_id} deleted.")
         self.load_habits()
 
-    def edit_habit(self, habit_id, new_name=None, new_description=None, new_periodicity=None):
+    def edit_habit(
+        self, habit_id, new_name=None, new_description=None, new_periodicity=None
+    ):
         """Edits an existing habit in the database."""
         db.edit_habit(habit_id, new_name, new_description, new_periodicity)
         print(f"Habit with ID {habit_id} updated.")
@@ -77,11 +80,11 @@ class HabitManager:
     # --- Completions ---
 
     def complete_habit(self, habit_id):
-    """
-    Mark a habit as completed and refresh the in-memory habit list.
-    This adds a timestamped completion entry to the database and reloads
-    all Habit objects so that streaks and status values are up to date.
-    """
+        """
+        Mark a habit as completed and refresh the in-memory habit list.
+        This adds a timestamped completion entry to the database and reloads
+        all Habit objects so that streaks and status values are up to date.
+        """
         db.mark_completion(habit_id)
         self.load_habits()
 
@@ -104,29 +107,31 @@ class HabitManager:
         data = []
         for habit in self.habits:
             count = len(db.get_completions(habit.id))
-            data.append({
-                "id": habit.id,
-                "name": habit.name,
-                "description": habit.description,
-                "periodicity": habit.periodicity,
-                "created_at": habit.created_at,
-                "completions": count
-            })
+            data.append(
+                {
+                    "id": habit.id,
+                    "name": habit.name,
+                    "description": habit.description,
+                    "periodicity": habit.periodicity,
+                    "created_at": habit.created_at,
+                    "completions": count,
+                }
+            )
         return data
 
     # --- Output (Rich Table) ---
 
     def render_habits_table(self, habits, title="Habit Overview"):
-    """
-    Render a Rich table displaying the given list of Habit objects.
+        """
+        Render a Rich table displaying the given list of Habit objects.
 
-    Args:
-        habits (list[Habit]): The habits to display.
-        title (str): Optional table title.
+        Args:
+            habits (list[Habit]): The habits to display.
+            title (str): Optional table title.
 
-    The table includes ID, name, description, periodicity, streak,
-    status, creation date, and last completion timestamp.
-    """
+        The table includes ID, name, description, periodicity, streak,
+        status, creation date, and last completion timestamp.
+        """
         table = Table(title=title)
 
         table.add_column("ID", justify="right")
@@ -146,11 +151,15 @@ class HabitManager:
             status_colors = {
                 "DONE": "[green]DONE[/green]",
                 "OVERDUE": "[red]OVERDUE[/red]",
-                "DUE": "[yellow]DUE[/yellow]"
+                "DUE": "[yellow]DUE[/yellow]",
             }
             status_colored = status_colors.get(status, "[yellow]DUE[/yellow]")
 
-            desc = habit.description if len(habit.description) < 40 else habit.description[:37] + "..."
+            desc = (
+                habit.description
+                if len(habit.description) < 40
+                else habit.description[:37] + "..."
+            )
 
             table.add_row(
                 str(habit.id),
@@ -161,7 +170,7 @@ class HabitManager:
                 status_colored,
                 habit.created_at,
                 last_completion,
-                )
+            )
 
         console.print(table)
 
@@ -174,5 +183,3 @@ class HabitManager:
     def show_habits_rich_for(self, habits, title="Habit Overview"):
         """Displays a list of habits that have been passed on."""
         self.render_habits_table(habits, title=title)
-
-
