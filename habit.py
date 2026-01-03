@@ -46,7 +46,19 @@ class Habit:
 
     @staticmethod
     def get_period_identifier(date, periodicity):
-        """Returns a comparable period identifier for date depending on periodicity."""
+        """
+        Convert a date into a comparable period identifier based on the habit's periodicity.
+
+        This is used to determine whether two completion dates belong to consecutive
+        periods (e.g., consecutive days, weeks, months, or years).
+
+        Returns:
+            A value representing the period:
+            - daily: datetime.date
+            - weekly: (year, ISO week number)
+            - monthly: (year, month)
+            - yearly: year (int)
+        """
         if periodicity == "daily":
             return date
         elif periodicity == "weekly":
