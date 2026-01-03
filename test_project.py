@@ -268,7 +268,18 @@ TEST_DB = db.DB_NAME
 
 @pytest.fixture(autouse=True)
 def setup_db():
-    # Before each test: Create a new database
+    """
+    Create a fresh test database before each test and remove it afterwards.
+
+    This fixture:
+    - creates the SQLite test database 'test_habits.db'
+    - builds the table schema
+    - loads the 4‑week SQL fixture (test_fixture.sql)
+    - yields control to the test
+    - deletes the database after the test completes
+
+    Ensures full test isolation and reproducibility.
+    """
     if os.path.exists(TEST_DB):
         os.remove(TEST_DB)
     conn = sqlite3.connect(TEST_DB)
