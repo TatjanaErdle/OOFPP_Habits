@@ -12,11 +12,13 @@ from datetime import datetime
 
 # --- List functions ---
 
+
 def list_all_habits():
     """
     Returns a list of all habits stored in the database.
     """
     return get_habits()
+
 
 def list_by_periodicity(periodicity):
     """
@@ -31,22 +33,25 @@ def list_by_periodicity(periodicity):
 
     return filtered
 
+
 # --- Streak analyses ---
 
+
 def get_period_identifier(date, periodicity):
-"""
-Convert a date into a comparable period identifier based on the habit's periodicity.
+    """
+    Convert a date into a comparable period identifier based on the habit's periodicity.
 
-This is used to determine whether two completion dates belong to consecutive
-periods (e.g., consecutive days, weeks, months, or years).
+    This is used to determine whether two completion dates belong to consecutive
+    periods (e.g., consecutive days, weeks, months, or years).
 
-Returns:
-    A value representing the period:
-    - daily: datetime.date
-    - weekly: (year, ISO week number)
-    - monthly: (year, month)
-    - yearly: year (int)
-"""
+    Returns:
+        A value representing the period:
+        - daily: datetime.date
+        - weekly: (year, ISO week number)
+        - monthly: (year, month)
+        - yearly: year (int)
+    """
+
     if periodicity == "daily":
         return date
     elif periodicity == "weekly":
@@ -57,6 +62,7 @@ Returns:
     elif periodicity == "yearly":
         return date.year
     return None
+
 
 def get_longest_streak_for_habit(habit_id):
     """
@@ -75,7 +81,9 @@ def get_longest_streak_for_habit(habit_id):
         return 0
 
     # Convert timestamps to date objects
-    dates = sorted(datetime.strptime(c[0], "%Y-%m-%d %H:%M:%S").date() for c in completions)
+    dates = sorted(
+        datetime.strptime(c[0], "%Y-%m-%d %H:%M:%S").date() for c in completions
+    )
     periods = [get_period_identifier(d, periodicity) for d in dates]
     unique_periods = sorted(set(periods))
 
@@ -107,7 +115,9 @@ def get_longest_streak_for_habit(habit_id):
             year_diff = curr[0] - prev[0]
             month_diff = curr[1] - prev[1]
 
-            if (year_diff == 0 and month_diff == 1) or (year_diff == 1 and prev[1] == 12 and curr[1] == 1):
+            if (year_diff == 0 and month_diff == 1) or (
+                year_diff == 1 and prev[1] == 12 and curr[1] == 1
+            ):
                 current += 1
             else:
                 current = 1
@@ -123,6 +133,7 @@ def get_longest_streak_for_habit(habit_id):
 
     return longest
 
+
 def get_longest_streak_all_habits():
     """
     Calculates the longest historical streak across all habits.
@@ -137,5 +148,3 @@ def get_longest_streak_all_habits():
             longest = streak
 
     return longest
-
-
