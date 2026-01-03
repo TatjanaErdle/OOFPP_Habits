@@ -275,6 +275,7 @@ The user is prompted for:
 - name 
 - description 
 - periodicity
+
 The habit is saved in the database and immediately visible.
 
 <img width="547" height="322" alt="image" src="https://github.com/user-attachments/assets/b18702f4-536e-4278-a009-ec59b5061a59" />
