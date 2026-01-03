@@ -16,6 +16,16 @@ class Habit:
     Represents a single habit with its attributes and related logic.
     """
     def __init__(self, habit_id, name, description, periodicity, created_at=None):
+    """
+    Initialize a Habit instance.
+
+    Args:
+        habit_id (int): Unique identifier of the habit.
+        name (str): Name of the habit.
+        description (str): Short description of the habit.
+        periodicity (str): Frequency of the habit ('daily', 'weekly', etc.).
+        created_at (str, optional): Timestamp of creation. Defaults to now.
+    """
         self.id = habit_id  # avoid shadowing built-in "id"
         self.name = name
         self.description = description
