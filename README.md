@@ -121,6 +121,17 @@ On first startup:
 - Demo data from test_fixture.sql is imported (only if the DB is empty)
 - The CLI menu appears
 
+### Troubleshooting
+
+If the application does not start, check the following:
+
+- Python 3.10+ is installed and available in your PATH  
+- The virtual environment is activated  
+- Dependencies were installed via `pip install -r requirements.txt`  
+- You are running `python main.py` from the project root directory  
+
+These are general Python setup issues and not specific to the Habit Tracker.
+
 ---
 
 ## Architecture
