@@ -46,7 +46,14 @@ def create_tables():
     conn.close()
 
 def import_fixture():
-    """Imports initial demo data from test_fixture.sql if the DB is empty."""
+    """
+    Load initial demo data from test_fixture.sql if the database is empty.
+
+    This function checks whether the habits table contains any rows.
+    If it is empty, the SQL fixture is executed to populate the database
+    with predefined demo habits and completion data. The fixture is only
+    imported once and will not overwrite existing user data.
+    """
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -101,7 +108,18 @@ def delete_habit(habit_id):
     conn.close()
 
 def edit_habit(habit_id, new_name=None, new_description=None, new_periodicity=None):
-    """Updates fields of a habit in the database."""
+    """
+    Update one or more fields of an existing habit.
+
+    Only the fields provided as arguments are updated. Fields left as None
+    remain unchanged.
+
+    Args:
+        habit_id (int): ID of the habit to update.
+        new_name (str, optional): New name for the habit.
+        new_description (str, optional): New description text.
+        new_periodicity (str, optional): New periodicity ('daily', 'weekly', etc.).
+    """
     conn = get_db_connection()
     cursor = conn.cursor()
 
