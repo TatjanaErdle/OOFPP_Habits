@@ -77,6 +77,11 @@ class HabitManager:
     # --- Completions ---
 
     def complete_habit(self, habit_id):
+    """
+    Mark a habit as completed and refresh the in-memory habit list.
+    This adds a timestamped completion entry to the database and reloads
+    all Habit objects so that streaks and status values are up to date.
+    """
         db.mark_completion(habit_id)
         self.load_habits()
 
@@ -112,6 +117,16 @@ class HabitManager:
     # --- Output (Rich Table) ---
 
     def render_habits_table(self, habits, title="Habit Overview"):
+    """
+    Render a Rich table displaying the given list of Habit objects.
+
+    Args:
+        habits (list[Habit]): The habits to display.
+        title (str): Optional table title.
+
+    The table includes ID, name, description, periodicity, streak,
+    status, creation date, and last completion timestamp.
+    """
         table = Table(title=title)
 
         table.add_column("ID", justify="right")
