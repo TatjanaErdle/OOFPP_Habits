@@ -41,6 +41,7 @@ from freezegun import freeze_time
 # UNIT TESTS: Habit CRUD
 # -------------------------------------------------------------------
 
+
 class TestHabitCRUDUnit:
 
     def test_habit_creation_unit(self):
@@ -58,9 +59,14 @@ class TestHabitCRUDUnit:
                 called["params"] = params
 
         class FakeConn:
-            def cursor(self): return FakeCursor()
-            def commit(self): pass
-            def close(self): pass
+            def cursor(self):
+                return FakeCursor()
+
+            def commit(self):
+                pass
+
+            def close(self):
+                pass
 
         monkeypatch.setattr("sqlite3.connect", lambda _: FakeConn())
         monkeypatch.setattr("db.get_habits", lambda: [])
@@ -77,9 +83,14 @@ class TestHabitCRUDUnit:
                 called["deleted"] = True
 
         class FakeConn:
-            def cursor(self): return FakeCursor()
-            def commit(self): pass
-            def close(self): pass
+            def cursor(self):
+                return FakeCursor()
+
+            def commit(self):
+                pass
+
+            def close(self):
+                pass
 
         monkeypatch.setattr("sqlite3.connect", lambda _: FakeConn())
         monkeypatch.setattr("db.get_habits", lambda: [])
@@ -87,19 +98,26 @@ class TestHabitCRUDUnit:
 
         assert "deleted" in called
 
+
 # -------------------------------------------------------------------
 # UNIT TESTS: Analytics (functional programming)
 # -------------------------------------------------------------------
 
+
 class TestAnalyticsUnit:
 
     def test_list_all_habits(self, monkeypatch):
-        monkeypatch.setattr("analysis.get_habits", lambda: [(1, "Reading", "desc", "daily")])
+        monkeypatch.setattr(
+            "analysis.get_habits", lambda: [(1, "Reading", "desc", "daily")]
+        )
         habits = analysis.list_all_habits()
         assert habits[0][1] == "Reading"
 
     def test_list_by_periodicity(self, monkeypatch):
-        fake_habits = [(1, "Reading", "desc", "daily"), (2, "Jogging", "desc", "weekly")]
+        fake_habits = [
+            (1, "Reading", "desc", "daily"),
+            (2, "Jogging", "desc", "weekly"),
+        ]
         monkeypatch.setattr("analysis.get_habits", lambda: fake_habits)
         daily = analysis.list_by_periodicity("daily")
         assert len(daily) == 1 and daily[0][1] == "Reading"
@@ -122,7 +140,9 @@ class TestAnalyticsUnit:
         assert analysis.get_period_identifier(d, "yearly") == 2025
 
     def test_longest_streak_no_completions(self, monkeypatch):
-        monkeypatch.setattr("analysis.get_habits", lambda: [(1, "Reading", "desc", "daily")])
+        monkeypatch.setattr(
+            "analysis.get_habits", lambda: [(1, "Reading", "desc", "daily")]
+        )
         monkeypatch.setattr("analysis.get_completions", lambda habit_id: [])
         streak = analysis.get_longest_streak_for_habit(1)
         assert streak == 0
@@ -133,18 +153,25 @@ class TestAnalyticsUnit:
         assert streak is None
 
     def test_longest_streak_all(self, monkeypatch):
-        monkeypatch.setattr("analysis.get_habits", lambda: [(1, "Reading", "desc", "daily")])
-        monkeypatch.setattr("analysis.get_completions", lambda habit_id: [
-            ("2025-11-01 10:00:00",),
-            ("2025-11-02 10:00:00",),
-            ("2025-11-03 10:00:00",),
-        ])
+        monkeypatch.setattr(
+            "analysis.get_habits", lambda: [(1, "Reading", "desc", "daily")]
+        )
+        monkeypatch.setattr(
+            "analysis.get_completions",
+            lambda habit_id: [
+                ("2025-11-01 10:00:00",),
+                ("2025-11-02 10:00:00",),
+                ("2025-11-03 10:00:00",),
+            ],
+        )
         longest = analysis.get_longest_streak_all_habits()
         assert longest == 3
+
 
 # -------------------------------------------------------------------
 # FUNCTIONAL REQUIREMENTS TESTS
 # -------------------------------------------------------------------
+
 
 class TestFunctionalRequirements:
     """
@@ -173,9 +200,14 @@ class TestFunctionalRequirements:
                 self.params = params
 
         class FakeConn:
-            def cursor(self): return FakeCursor()
-            def commit(self): pass
-            def close(self): pass
+            def cursor(self):
+                return FakeCursor()
+
+            def commit(self):
+                pass
+
+            def close(self):
+                pass
 
         fake = FakeConn()
         monkeypatch.setattr("sqlite3.connect", lambda _: fake)
@@ -198,9 +230,14 @@ class TestFunctionalRequirements:
                 self.called = True
 
         class FakeConn:
-            def cursor(self): return FakeCursor()
-            def commit(self): pass
-            def close(self): pass
+            def cursor(self):
+                return FakeCursor()
+
+            def commit(self):
+                pass
+
+            def close(self):
+                pass
 
         monkeypatch.setattr("sqlite3.connect", lambda _: FakeConn())
         monkeypatch.setattr("db.get_habits", lambda: [])
@@ -229,17 +266,19 @@ class TestFunctionalRequirements:
         # Fake habits
         fake_habits = [
             (1, "Reading", "desc", "daily"),
-            (2, "Jogging", "desc", "weekly")
+            (2, "Jogging", "desc", "weekly"),
         ]
 
         # Fake completions
         fake_completions = {
             1: [("2025-11-01 10:00:00",), ("2025-11-02 10:00:00",)],
-            2: []
+            2: [],
         }
 
         monkeypatch.setattr("analysis.get_habits", lambda: fake_habits)
-        monkeypatch.setattr("analysis.get_completions", lambda hid: fake_completions[hid])
+        monkeypatch.setattr(
+            "analysis.get_completions", lambda hid: fake_completions[hid]
+        )
 
         # 5a: list_all_habits
         assert len(analysis.list_all_habits()) == 2
@@ -256,6 +295,7 @@ class TestFunctionalRequirements:
         longest = analysis.get_longest_streak_all_habits()
         assert longest == 2
 
+
 # -------------------------------------------------------------------
 # INTEGRATION TESTS
 # -------------------------------------------------------------------
@@ -265,6 +305,7 @@ class TestFunctionalRequirements:
 # Use test database
 db.DB_NAME = "test_habits.db"
 TEST_DB = db.DB_NAME
+
 
 @pytest.fixture(autouse=True)
 def setup_db():
@@ -285,7 +326,8 @@ def setup_db():
     conn = sqlite3.connect(TEST_DB)
 
     # Create table structure
-    conn.executescript("""
+    conn.executescript(
+        """
     CREATE TABLE IF NOT EXISTS habits (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
@@ -299,7 +341,8 @@ def setup_db():
         completed_at TEXT,
         FOREIGN KEY(habit_id) REFERENCES habits(id)
     );
-    """)
+    """
+    )
 
     # Import fixture data
     with open("test_fixture.sql", "r") as f:
@@ -314,13 +357,16 @@ def setup_db():
     if os.path.exists(TEST_DB):
         os.remove(TEST_DB)
 
+
 # --- Tests for db.py ---
+
 
 class TestDBIntegration:
 
     def test_add_habit_and_get_habits(self):
         # Add new habit
         from db import add_habit, get_habits
+
         add_habit("Testing habit", "Test", "daily")
         habits = get_habits()
         names = [h[1] for h in habits]
@@ -328,11 +374,13 @@ class TestDBIntegration:
 
     def test_get_habits_fixture_integrity(self):
         from db import get_habits
+
         habits = get_habits()
         assert len(habits) == 5  # Fixture contains 5 habits
 
     def test_get_completions_fixture_meditation(self):
         from db import get_habits, get_completions
+
         habits = get_habits()
         meditation_id = [h[0] for h in habits if h[1] == "Meditation"][0]
         completions = get_completions(meditation_id)
@@ -340,6 +388,7 @@ class TestDBIntegration:
 
     def test_mark_completion_adds_entry(self):
         from db import get_habits, get_completions, mark_completion
+
         habits = get_habits()
         habit_id = habits[0][0]
         before = len(get_completions(habit_id))
@@ -347,7 +396,9 @@ class TestDBIntegration:
         after = len(get_completions(habit_id))
         assert after == before + 1
 
+
 # --- Tests for habit.py ---
+
 
 class TestHabitIntegration:
 
@@ -362,7 +413,9 @@ class TestHabitIntegration:
         habits = db.get_habits()
         meditation = [h for h in habits if h[1] == "Meditation"][0]
         habit = Habit(meditation[0], meditation[1], meditation[2], meditation[3])
-        assert habit.is_completed_today() is False  # Fixture contains no entries for today
+        assert (
+            habit.is_completed_today() is False
+        )  # Fixture contains no entries for today
 
     def test_mark_completed_adds_today_entry(self):
         habits = db.get_habits()
@@ -408,7 +461,9 @@ class TestHabitIntegration:
         next_due = habit.next_due_date()
         assert next_due > datetime.date(2025, 11, 16)
 
+
 # --- Tests for habitmanager.py ---
+
 
 class TestHabitManagerIntegration:
 
@@ -463,7 +518,9 @@ class TestHabitManagerIntegration:
         assert all("completions" in h for h in stats)
         assert all(isinstance(h["completions"], int) for h in stats)
 
+
 # --- Tests for analysis.py ---
+
 
 class TestAnalysisIntegration:
 
@@ -499,4 +556,3 @@ class TestAnalysisIntegration:
     def test_get_longest_streak_all_habits_fixture(self):
         longest = analysis.get_longest_streak_all_habits()
         assert longest == 28  # Reading has the longest streak
-
