@@ -14,6 +14,7 @@ console = Console()
 
 # --- Setup / Getting Started ---
 
+
 def main():
     """Starts the CLI for the Habit Tracker System."""
     manager = HabitManager()
@@ -41,7 +42,9 @@ def main():
         else:
             console.print("[red]Invalid entry. Please select 1–3.[/red]")
 
+
 # --- Habit-specific menu ---
+
 
 def show_habit_actions_menu(manager):
     """
@@ -97,15 +100,18 @@ def show_habit_actions_menu(manager):
                 habit = manager.get_habit_by_id(habit_id)
                 if habit:
                     new_name = input("Enter new name (leave blank to keep current): ")
-                    new_description = input("Enter new description (leave blank to keep current): ")
+                    new_description = input(
+                        "Enter new description (leave blank to keep current): "
+                    )
                     new_periodicity = input(
-                        "Enter new frequency (daily/weekly/monthly/yearly, leave blank to keep current): ")
+                        "Enter new frequency (daily/weekly/monthly/yearly, leave blank to keep current): "
+                    )
 
                     manager.edit_habit(
                         habit_id,
                         new_name if new_name else None,
                         new_description if new_description else None,
-                        new_periodicity if new_periodicity else None
+                        new_periodicity if new_periodicity else None,
                     )
                     console.print(f"[green]Habit {habit_id} updated.[/green]")
                 else:
@@ -132,7 +138,9 @@ def show_habit_actions_menu(manager):
                 habit = manager.get_habit_by_id(habit_id)
                 if habit:
                     streak = habit.get_streak()
-                    console.print(f"[bold green]Current streak for '{habit.name}': {streak}[/bold green]")
+                    console.print(
+                        f"[bold green]Current streak for '{habit.name}': {streak}[/bold green]"
+                    )
                 else:
                     console.print(f"[red]Habit with ID {habit_id} not found.[/red]")
             except ValueError:
@@ -145,9 +153,13 @@ def show_habit_actions_menu(manager):
                 habit = manager.get_habit_by_id(habit_id)
                 if habit:
                     if habit.is_completed_today():
-                        console.print(f"[green]Habit '{habit.name}' is already completed today.[/green]")
+                        console.print(
+                            f"[green]Habit '{habit.name}' is already completed today.[/green]"
+                        )
                     else:
-                        console.print(f"[yellow]Habit '{habit.name}' is not yet completed today.[/yellow]")
+                        console.print(
+                            f"[yellow]Habit '{habit.name}' is not yet completed today.[/yellow]"
+                        )
                 else:
                     console.print(f"[red]Habit with ID {habit_id} not found.[/red]")
             except ValueError:
@@ -160,7 +172,9 @@ def show_habit_actions_menu(manager):
                 habit = manager.get_habit_by_id(habit_id)
                 if habit:
                     due = habit.next_due_date()
-                    console.print(f"[bold cyan]Next due date for '{habit.name}': {due}[/bold cyan]")
+                    console.print(
+                        f"[bold cyan]Next due date for '{habit.name}': {due}[/bold cyan]"
+                    )
                 else:
                     console.print(f"[red]Habit with ID {habit_id} not found.[/red]")
             except ValueError:
@@ -171,7 +185,9 @@ def show_habit_actions_menu(manager):
         else:
             console.print("[red]Invalid input.[/red]")
 
+
 # --- Analysis menu ---
+
 
 def show_analysis_menu(manager):
     """
@@ -202,7 +218,9 @@ def show_analysis_menu(manager):
             # Display filtered habits by periodicity
             periodicity = input("What frequency (daily/weekly/monthly/yearly)? ")
             manager.load_habits()
-            filtered = [h for h in manager.get_all_habits() if h.periodicity == periodicity]
+            filtered = [
+                h for h in manager.get_all_habits() if h.periodicity == periodicity
+            ]
             if not filtered:
                 console.print("[red]No matching habits found.[/red]")
             else:
@@ -219,9 +237,13 @@ def show_analysis_menu(manager):
                 if habit:
                     streak = analysis.get_longest_streak_for_habit(habit_id)
                     if streak is None:
-                        console.print(f"[red]Habit with ID {habit_id} not found in database.[/red]")
+                        console.print(
+                            f"[red]Habit with ID {habit_id} not found in database.[/red]"
+                        )
                     else:
-                        console.print(f"[bold green]Longest streak for Habit {habit_id}: {streak}[/bold green]")
+                        console.print(
+                            f"[bold green]Longest streak for Habit {habit_id}: {streak}[/bold green]"
+                        )
                 else:
                     console.print(f"[red]Habit with ID {habit_id} not found.[/red]")
             except ValueError:
@@ -231,12 +253,15 @@ def show_analysis_menu(manager):
             # Longest streak across all habits
             manager.load_habits()
             streak = analysis.get_longest_streak_all_habits()
-            console.print(f"[bold green]Longest streak of all habits: {streak} days[/bold green]")
+            console.print(
+                f"[bold green]Longest streak of all habits: {streak} days[/bold green]"
+            )
 
         elif choice == "5":
             break
         else:
             console.print("[red]Invalid input.[/red]")
+
 
 # --- Entry point ---
 
