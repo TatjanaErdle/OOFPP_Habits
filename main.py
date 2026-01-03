@@ -44,7 +44,13 @@ def main():
 # --- Habit-specific menu ---
 
 def show_habit_actions_menu(manager):
-    """Submenu for habit-specific actions."""
+    """
+    Display the submenu for habit-specific actions.
+
+    This function runs an interactive loop that allows the user to
+    create, edit, delete, and complete habits, as well as inspect
+    streaks and due dates.
+    """
     while True:
         console.print("\n[bold yellow]--- Habit Actions ---[/bold yellow]")
         print("1. Create new habit")
@@ -168,7 +174,12 @@ def show_habit_actions_menu(manager):
 # --- Analysis menu ---
 
 def show_analysis_menu(manager):
-    """Submenu for analysis functions."""
+    """
+    Display the submenu for analytics functions.
+
+    Provides options to view all habits, filter by periodicity,
+    and inspect longest streaks.
+    """
     while True:
         console.print("\n[bold yellow]--- Analysis ---[/bold yellow]")
         print("1. Show all habits")
