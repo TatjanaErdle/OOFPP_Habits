@@ -268,6 +268,8 @@ After starting the program, the main menu appears:
 2. Analysis 
 3. Exit
 
+<img width="311" height="126" alt="image" src="https://github.com/user-attachments/assets/926a1384-b142-40f2-be74-68b40833e532" />
+
 ### Example: Creating a new habit
 The user is prompted for:
 - name 
@@ -275,8 +277,12 @@ The user is prompted for:
 - periodicity
 The habit is saved in the database and immediately visible.
 
+<img width="547" height="322" alt="image" src="https://github.com/user-attachments/assets/b18702f4-536e-4278-a009-ec59b5061a59" />
+
 ### Example: Completing a habit
 The user selects a habit ID → completion is stored with timestamp.
+
+<img width="1345" height="532" alt="image" src="https://github.com/user-attachments/assets/638cf4a7-d955-424a-a164-f91dee2562eb" />
 
 ### Example: Viewing all habits
 Displays a rich table with:
@@ -288,6 +294,8 @@ Displays a rich table with:
 - Status (DONE / DUE / OVERDUE)
 - Created at 
 - Last completion
+
+<img width="1350" height="542" alt="image" src="https://github.com/user-attachments/assets/5ef8902e-dc6a-4ee1-8dd6-60548a60ea58" />
 
 ---
 
