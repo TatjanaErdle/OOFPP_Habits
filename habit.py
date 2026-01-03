@@ -15,17 +15,18 @@ class Habit:
     """
     Represents a single habit with its attributes and related logic.
     """
-    def __init__(self, habit_id, name, description, periodicity, created_at=None):
-    """
-    Initialize a Habit instance.
 
-    Args:
-        habit_id (int): Unique identifier of the habit.
-        name (str): Name of the habit.
-        description (str): Short description of the habit.
-        periodicity (str): Frequency of the habit ('daily', 'weekly', etc.).
-        created_at (str, optional): Timestamp of creation. Defaults to now.
-    """
+    def __init__(self, habit_id, name, description, periodicity, created_at=None):
+        """
+        Initialize a Habit instance.
+
+        Args:
+            habit_id (int): Unique identifier of the habit.
+            name (str): Name of the habit.
+            description (str): Short description of the habit.
+            periodicity (str): Frequency of the habit ('daily', 'weekly', etc.).
+            created_at (str, optional): Timestamp of creation. Defaults to now.
+        """
         self.id = habit_id  # avoid shadowing built-in "id"
         self.name = name
         self.description = description
@@ -50,7 +51,10 @@ class Habit:
         """
         completions = db.get_completions(self.id)
         today = datetime.now().date()
-        return any(datetime.strptime(c[0], "%Y-%m-%d %H:%M:%S").date() == today for c in completions)
+        return any(
+            datetime.strptime(c[0], "%Y-%m-%d %H:%M:%S").date() == today
+            for c in completions
+        )
 
     # --- Help method ---
 
@@ -93,7 +97,9 @@ class Habit:
             return 0
 
         # Converts timestamps to date objects.
-        dates = sorted(datetime.strptime(c[0], "%Y-%m-%d %H:%M:%S").date() for c in completions)
+        dates = sorted(
+            datetime.strptime(c[0], "%Y-%m-%d %H:%M:%S").date() for c in completions
+        )
 
         periodicity = self.periodicity.lower()
 
@@ -127,7 +133,11 @@ class Habit:
             elif periodicity == "weekly":
                 same_year = current[0] == previous[0]
                 next_week = current[1] - previous[1] == 1
-                year_rollover = current[0] - previous[0] == 1 and previous[1] == 52 and current[1] == 1
+                year_rollover = (
+                    current[0] - previous[0] == 1
+                    and previous[1] == 52
+                    and current[1] == 1
+                )
 
                 if (same_year and next_week) or year_rollover:
                     streak += 1
@@ -138,7 +148,9 @@ class Habit:
                 year_diff = current[0] - previous[0]
                 month_diff = current[1] - previous[1]
 
-                if (year_diff == 0 and month_diff == 1) or (year_diff == 1 and previous[1] == 12 and current[1] == 1):
+                if (year_diff == 0 and month_diff == 1) or (
+                    year_diff == 1 and previous[1] == 12 and current[1] == 1
+                ):
                     streak += 1
                 else:
                     break
@@ -172,7 +184,10 @@ class Habit:
             return start_of_week <= last_completion <= end_of_week
 
         if self.periodicity == "monthly":
-            return last_completion.year == today.year and last_completion.month == today.month
+            return (
+                last_completion.year == today.year
+                and last_completion.month == today.month
+            )
 
         if self.periodicity == "yearly":
             return last_completion.year == today.year
@@ -271,4 +286,3 @@ class Habit:
             return last + relativedelta(years=1)
 
         return None
-
