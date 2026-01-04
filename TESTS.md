@@ -214,31 +214,31 @@ This structure ensures that the project is both technically correct and function
 
 This screenshot confirms that the entire test suite runs successfully and all tests pass without errors.
 
-<img width="676" height="86" alt="image" src="https://github.com/user-attachments/assets/b084f934-e499-4fe4-882f-9dac8a412e2e" />
+![Screenshot](img/img_1.png)
 
 ### 2. Functional Requirements Tests
 
 This screenshot demonstrates that all functional requirements defined in the assignment are fully implemented and verified through dedicated tests.
 
-<img width="827" height="72" alt="image" src="https://github.com/user-attachments/assets/ef244315-2f72-4e1c-871d-b5a072a78266" />
+![Screenshot](img/img_2.png)
 
 ### 3. Integration Tests with SQL Fixture
 
 This screenshot shows that the system works correctly with the real SQLite database and the 4‑week SQL fixture, validating end‑to‑end module interaction.
 
-<img width="838" height="67" alt="image" src="https://github.com/user-attachments/assets/8d3f73c4-44e9-414e-82cc-65e2167cf0ed" />
+![Screenshot](img/img_3.png)
 
 ### 4. CLI Start (Program Launch)
 
 This screenshot demonstrates that the Habit Tracker CLI starts correctly, initializes the database, and displays the main menu.
 
-<img width="717" height="185" alt="image" src="https://github.com/user-attachments/assets/bf704dfb-60a6-45f4-ae86-fd24478d57bf" />
+![Screenshot](img/img_4.png)
 
 ### 5. Example Analysis Output
 
 This screenshot shows a real analysis result (e.g., "Show all habits"), proving that the Rich table rendering works and the demo data loads correctly.
 
-<img width="1365" height="588" alt="image" src="https://github.com/user-attachments/assets/fbe6a120-30d6-4dd1-b0e1-9f4fe53eea71" />
+![Screenshot](img/img.png)
 
 
 
