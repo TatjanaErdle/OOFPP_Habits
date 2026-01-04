@@ -279,7 +279,7 @@ After starting the program, the main menu appears:
 2. Analysis 
 3. Exit
 
-<img width="311" height="126" alt="image" src="https://github.com/user-attachments/assets/926a1384-b142-40f2-be74-68b40833e532" />
+![Screenshot](img/img_5.png)
 
 ### Example: Creating a new habit
 The user is prompted for:
